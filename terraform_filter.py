@@ -15,8 +15,9 @@ def filter_terraform_output(tf_output, keys):
         for match in matches:
             start, end = match.span()            
             equals_index = output.find("= ", start, end)
-            secret = "*" * (end - equals_index - 2)
-            output = output[:equals_index+2]  + secret  + output[end:]
+            if equals_index > 0:
+                secret = "*" * (end - equals_index - 2)
+                output = output[:equals_index+2]  + secret  + output[end:]
     return output
 
 if __name__ == "__main__":
