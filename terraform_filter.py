@@ -8,7 +8,20 @@ import sys
 import re
 
 def filter_terraform_output(tf_output, keys):
+    renewal_string = "------------------------------------------------------------------------"
+
     output = tf_output
+
+    r_index = output.find(renewal_string)
+    # remove everything above and including the renewal string
+    # this also removes the newline
+    output = output[r_index + len(renewal_string) + 2:]
+
+    r_index = output.rfind(renewal_string)
+    # remove everything after and including the final renewal string
+    # this also removes the newline
+    output = output[:r_index - 2]
+    
     for key in keys:
         reg = r"%s.*" % key
         matches = re.finditer(reg, output, re.IGNORECASE)
